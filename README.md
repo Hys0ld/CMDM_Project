@@ -76,26 +76,44 @@ This creates the first set of Golden Records.
 
 ### Fuzzy Matching
 
-Customers that cannot be matched using an exact email match are compared using multiple attributes.
+Customers that cannot be matched using an exact email match are compared using several customer attributes.
 
-Matching factors include:
+The matching process looks at:
 
-* Email
 * First name
 * Last name
+* Email
 * Phone number
 * City
 * State
 
-The project uses:
+Different similarity techniques are used depending on the type of data:
 
-* Levenshtein distance
-* Soundex
-* Exact matching
+* **Levenshtein distance** measures how many character changes are needed to make two values match. This helps identify small spelling differences such as `John` and `Jon`.
+* **Soundex** compares how names sound, which helps identify names with different spellings such as `Smith` and `Smyth`.
+* **Exact matching** is used for fields where an exact value is important, such as state codes or standardized phone numbers.
 
-A weighted confidence score is calculated for each possible match.
+The individual field matches are combined into a **weighted confidence score**. Customers with stronger similarities across multiple attributes receive a higher score.
 
-Higher-confidence matches are selected as the best match for each customer.
+For example:
+
+```text
+First Name     → High similarity
+Last Name      → Exact match
+Phone          → Exact match
+City           → Exact match
+State          → Exact match
+Email          → Similar
+                 ↓
+          High Confidence
+                 ↓
+        Same Customer
+```
+
+The highest-confidence match is selected when a customer cannot be identified through deterministic matching.
+
+This allows the project to identify customers even when their information is slightly different between Shopify, Salesforce, and Zendesk.
+
 
 ---
 
