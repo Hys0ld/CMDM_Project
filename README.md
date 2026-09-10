@@ -36,8 +36,6 @@ Sources include:
 * Shopify customer data
 * Salesforce leads
 
-Shopify and Salesforce data are retrieved through APIs, while Zendesk data is loaded from a Databricks Volume.
-
 ---
 
 ## 2. Silver Layer
